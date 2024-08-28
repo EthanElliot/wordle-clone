@@ -1,94 +1,56 @@
 import { useState } from "react";
 import { checkWord } from "../services/checkWord";
 import { keys } from "../constants/letters";
-
+import { formatGuess } from "../services/formatGuess";
 
 type CharType = {
     value: string;
-    color: string
-}
+    color: string;
+};
 
 type KeysProps = {
-    [key: string]: { color: string; }
-}
+    [key: string]: { color: string };
+};
 
-const useWordle = (word: string | null) => {
-    console.log(word)
+const useWordle = (word: string) => {
     const [guesses, setGuesses] = useState<CharType[][]>([...Array(6)]);
     const [history, setHistory] = useState<string[]>([]);
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [turn, setTurn] = useState<number>(0);
-    const [isCorrect, setIsCorrect] = useState<boolean>(false)
-    const [incorrectGuess, setIncorrectGuess] = useState<boolean>(false)
-    const [incorrectGuessMessage, setIncorrectGuessMessage] = useState<string>('')
-    const [letters, setLetters] = useState<KeysProps>(keys)
-
-
-    const formatGuess = () => {
-        const wordArray: string[] | null[] = [...word]
-        const formatGuess: CharType[] = [...currentGuess].map((value) => {
-            setLetters((prevLetters) => ({
-                ...prevLetters,
-                [value]: { color: 'grey' }
-            }))
-            return { value: value, color: 'grey' }
-        })
-
-        formatGuess.forEach((char, i) => {
-            if (wordArray[i] === char.value) {
-                formatGuess[i].color = 'green'
-                setLetters((prevLetters) => ({
-                    ...prevLetters,
-                    [char.value]: { color: 'green' }
-                }))
-                wordArray[i] = null
-            }
-        })
-
-        formatGuess.forEach((char, i) => {
-            if (wordArray.includes(char.value) && char.color !== 'green') {
-                formatGuess[i].color = 'yellow'
-                setLetters((prevLetters) => ({
-                    ...prevLetters,
-                    [char.value]: { color: 'yellow' }
-                }))
-                wordArray[wordArray.indexOf(char.value)] = null
-            }
-        })
-
-        return formatGuess
-    }
-
+    const [isCorrect, setIsCorrect] = useState<boolean>(false);
+    const [incorrectGuess, setIncorrectGuess] = useState<boolean>(false);
+    const [incorrectGuessMessage, setIncorrectGuessMessage] =
+        useState<string>("");
+    const [letters, setLetters] = useState<KeysProps>(keys);
 
     const addNewGuess = (formattedGuess: CharType[]) => {
         if (currentGuess === word) {
-            setIsCorrect(true)
+            setIsCorrect(true);
         }
         setGuesses((prevGuesses) => {
-            let newGuesses = [...prevGuesses]
-            newGuesses[turn] = formattedGuess
-            return newGuesses
-
-        })
+            let newGuesses = [...prevGuesses];
+            newGuesses[turn] = formattedGuess;
+            return newGuesses;
+        });
         setHistory((prevHistory) => {
-            return [...prevHistory, currentGuess]
-        })
+            return [...prevHistory, currentGuess];
+        });
 
         setTurn((prevTurn) => {
-            return prevTurn + 1
-        })
+            return prevTurn + 1;
+        });
 
-        setCurrentGuess('')
-    }
+        setCurrentGuess("");
+    };
+
 
     const handleKey = (key: string) => {
         if (isCorrect) {
-            return
+            return;
         }
         //handle letters
         if (key.length == 1 && key.match(/^[a-zA-Z]/)) {
             if (currentGuess.length >= 5) {
-
                 return;
             }
             setCurrentGuess((oldGuess) => oldGuess + key);
@@ -100,45 +62,48 @@ const useWordle = (word: string | null) => {
         //handle enter
         else if (key == "Enter") {
             if (turn > 6) {
-                console.log('All guesses used!')
-                return
+                console.log("All guesses used!");
+                return;
             }
 
             if (currentGuess.length < 5) {
-                handleIncorrectGuess('Word not long enouph')
+                handleIncorrectGuess("Word not long enouph");
                 return;
             }
 
             if (history.includes(currentGuess)) {
-                handleIncorrectGuess('Word already used')
-                return
-            }
-
-            if (!checkWord(currentGuess)) {
-                handleIncorrectGuess('invalid word')
+                handleIncorrectGuess("Word already used");
                 return;
             }
 
-            const formatted = formatGuess()
-            addNewGuess(formatted)
+            if (!checkWord(currentGuess)) {
+                handleIncorrectGuess("invalid word");
+                return;
+            }
 
+            const formatted = formatGuess(word, currentGuess);
+            addNewGuess(formatted);
+            formatted.forEach((char) =>
+                setLetters((prevLetters) => ({
+                    ...prevLetters,
+                    [char.value]: { color: char.color },
+                }))
+            );
         }
-    }
-
+    };
 
     const handleKeyPress = (event: KeyboardEvent) => {
         const key: string = event.key;
         handleKey(key);
     };
 
-    const handleIncorrectGuess = (message:string) => {
-        setIncorrectGuess(true)
-        setIncorrectGuessMessage(message)
+    const handleIncorrectGuess = (message: string) => {
+        setIncorrectGuess(true);
+        setIncorrectGuessMessage(message);
         setTimeout(() => {
-            setIncorrectGuess(false)
+            setIncorrectGuess(false);
         }, 1000);
-    }
-
+    };
 
     return {
         guesses,
@@ -150,8 +115,8 @@ const useWordle = (word: string | null) => {
         handleKey,
         handleKeyPress,
         incorrectGuess,
-        incorrectGuessMessage
-      };
-}
+        incorrectGuessMessage,
+    };
+};
 
-export default useWordle
+export default useWordle;

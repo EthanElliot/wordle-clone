@@ -6,7 +6,15 @@ import Keyboard from "./components/Keyboard";
 import ErrorPopup from "./components/ErrorPopup";
 
 function App() {
-  const [word, setWord] = useState<string | null>(null);
+  const [word, setWord] = useState<string>("");
+
+  //get random word
+  useEffect(() => {
+    setWord(getWord());
+  }, [setWord]);
+  console.log(word);
+
+  //use wordle hook
   const {
     currentGuess,
     handleKeyPress,
@@ -31,11 +39,6 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [handleKeyPress, isCorrect, turn]);
 
-  //get random word
-  useEffect(() => {
-    setWord(getWord());
-  }, [setWord]);
-
   return (
     <div
       className={`flex flex-col w-screen h-screen bg-slate-900 text-white justify-center items-center ${
@@ -43,10 +46,8 @@ function App() {
       } `}
     >
       <ErrorPopup message={incorrectGuessMessage} isVisible={incorrectGuess} />
-      {isCorrect && <h1>The word was: {word}!</h1>}
       {guesses.map((guess, i) => {
         const isCurrentGuess = i === turn;
-
         if (isCurrentGuess) {
           return <Row key={i} guess={guess} currentGuess={currentGuess} />;
         } else {
