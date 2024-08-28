@@ -35,7 +35,7 @@ function App() {
 
   return (
     <div className="flex flex-col w-screen h-screen bg-slate-900 text-white justify-center items-center ">
-      {isCorrect && <h1>The word was: {word} !</h1>}
+      {isCorrect && <h1>The word was: {word}!</h1>}
       {guesses.map((guess, i) => {
         const isCurrentGuess = i === turn;
 

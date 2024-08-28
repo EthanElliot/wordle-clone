@@ -3,17 +3,50 @@
 @tailwind utilities;
 
 @layer components {
-  .red {
-    @apply bg-red-500;
-  }
-
-  .yellow {
+  /* color keys */
+  .key > div.yellow {
     @apply bg-yellow-500;
   }
-  .green {
+  .key > div.green {
     @apply bg-green-500;
   }
-  .grey {
+  .key > div.grey {
     @apply bg-slate-600;
+  }
+
+  /* color to tiles on board + animation delay for each consecutive tile */
+  .guessrow > div.yellow {
+    --bg-color: #eab308;
+    @apply animate-flip;
+  }
+
+  .guessrow > div.green {
+    --bg-color: #22c55e;
+    @apply animate-flip;
+  }
+  .guessrow > div.grey {
+    --bg-color: #475569;
+    @apply animate-flip;
+  }
+
+  .guessrow > div:nth-child(1) {
+    @apply delay-0;
+  }
+  .guessrow > div:nth-child(2) {
+    animation-delay: 200ms;
+  }
+  .guessrow > div:nth-child(3) {
+    animation-delay: 400ms;
+  }
+  .guessrow > div:nth-child(4) {
+    animation-delay: 600ms;
+  }
+  .guessrow > div:nth-child(5) {
+    animation-delay: 800ms;
+  }
+
+  /* current guess letter enter animation */
+  .currentguessrow > div.filled {
+    @apply animate-jump;
   }
 }

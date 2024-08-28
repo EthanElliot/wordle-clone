@@ -45,7 +45,7 @@ const useWordle = (word:string|null) => {
         })
 
         formatGuess.forEach((char,i) => {
-            if(wordArray.includes(char.value,i) && char.color !== 'green'){
+            if(wordArray.includes(char.value) && char.color !== 'green'){
                 formatGuess[i].color = 'yellow'
                 setLetters((prevLetters) => ({
                     ...prevLetters,
@@ -54,7 +54,7 @@ const useWordle = (word:string|null) => {
                 wordArray[wordArray.indexOf(char.value)]=null
             }
         })
-        console.log(letters)
+
         return formatGuess
     }
 
@@ -79,6 +79,9 @@ const useWordle = (word:string|null) => {
     }
 
     const handleKey = (key:string) => {
+        if (isCorrect){
+            return
+        }
         //handle letters
         if (key.length == 1 && key.match(/^[a-zA-Z]/)) {
             if (currentGuess.length >= 5) {

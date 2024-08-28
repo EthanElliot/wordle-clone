@@ -15,13 +15,21 @@ const Row: FC<RowProps> = ({ guess, currentGuess }: RowProps) => {
   } else if (currentGuess) {
     const letters = currentGuess.split("");
     boxes = [
-      ...letters.map((char, i) => <Box key={i} value={char} />),
+      ...letters.map((char, i) => <Box key={i} value={char} styles="filled" />),
       ...Array(5 - letters.length).fill(<Box value={" "} />),
     ];
   } else {
     boxes = [...Array(5).fill(<Box value={" "} />)];
   }
-  return <div className="mb-2 flex flex-row gap-2">{boxes}</div>;
+  return (
+    <div
+      className={`mb-2 flex flex-row gap-2 row ${guess ? "guessrow" : ""} ${
+        currentGuess ? "currentguessrow" : ""
+      } `}
+    >
+      {boxes}
+    </div>
+  );
 };
 
 export default Row;

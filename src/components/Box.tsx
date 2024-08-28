@@ -3,15 +3,17 @@ import React from "react";
 type BoxProps = {
   value: string;
   color?: string | null;
+  styles?: string;
 };
-const Box: React.FC<BoxProps> = ({ value, color }: BoxProps) => {
+const Box: React.FC<BoxProps> = ({ value, color, styles }: BoxProps) => {
   return (
     <div
-      className={`border-2 border-slate-300 aspect-square w-16 flex justify-center items-center uppercase ${
-        color ?? ""
-      }`}
+      className={`border-2  aspect-square w-14 flex justify-center items-center uppercase  
+        ${color ?? ""}
+        ${value == " " ? "border-slate-500" : "border-slate-300"}
+        ${styles ?? ""} `}
     >
-      <p>{value == null ? " " : value}</p>
+      <p>{value}</p>
     </div>
   );
 };
