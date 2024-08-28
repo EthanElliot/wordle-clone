@@ -49,4 +49,9 @@
   .currentguessrow > div.filled {
     @apply animate-jump;
   }
+
+  /* apply amnimation to incorect guess */
+  .incorrectguess > .currentguessrow {
+    @apply animate-wobble;
+  }
 }

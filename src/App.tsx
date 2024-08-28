@@ -3,6 +3,7 @@ import { getWord } from "./services/getWord";
 import Row from "./components/Row";
 import useWordle from "./hooks/useWordle";
 import Keyboard from "./components/Keyboard";
+import ErrorPopup from "./components/ErrorPopup";
 
 function App() {
   const [word, setWord] = useState<string | null>(null);
@@ -14,6 +15,8 @@ function App() {
     guesses,
     isCorrect,
     letters,
+    incorrectGuess,
+    incorrectGuessMessage,
   } = useWordle(word);
 
   // add event listener
@@ -34,7 +37,12 @@ function App() {
   }, [setWord]);
 
   return (
-    <div className="flex flex-col w-screen h-screen bg-slate-900 text-white justify-center items-center ">
+    <div
+      className={`flex flex-col w-screen h-screen bg-slate-900 text-white justify-center items-center ${
+        incorrectGuess ? "incorrectguess" : ""
+      } `}
+    >
+      <ErrorPopup message={incorrectGuessMessage} isVisible={incorrectGuess} />
       {isCorrect && <h1>The word was: {word}!</h1>}
       {guesses.map((guess, i) => {
         const isCurrentGuess = i === turn;
