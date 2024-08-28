@@ -1,15 +1,7 @@
-import axios from 'axios';
+import { words } from "../constants/words"
 
-
-
-export const getWord= async ():Promise<string> =>  {
-    const words:string[] = await axios.get('https://raw.githubusercontent.com/charlesreid1/five-letter-words/master/sgb-words.txt',{
-      headers: {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response)=> response.data.split('\n'))
-
-    const randomWord = words[Math.floor(Math.random()* words.length)]
+export const getWord=  ():string =>  {
+  const wordArray: string[] = Array.from(words)
+    const randomWord = wordArray[Math.floor(Math.random()* wordArray.length)];
     return randomWord
   }

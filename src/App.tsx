@@ -2,11 +2,19 @@ import { useState, useEffect } from "react";
 import { getWord } from "./services/getWord";
 import Row from "./components/Row";
 import useWordle from "./hooks/useWordle";
+import Keyboard from "./components/Keyboard";
 
 function App() {
   const [word, setWord] = useState<string | null>(null);
-  const { currentGuess, handleKeyPress, turn, guesses, isCorrect } =
-    useWordle(word);
+  const {
+    currentGuess,
+    handleKeyPress,
+    handleKey,
+    turn,
+    guesses,
+    isCorrect,
+    letters,
+  } = useWordle(word);
 
   // add event listener
   useEffect(() => {
@@ -22,7 +30,7 @@ function App() {
 
   //get random word
   useEffect(() => {
-    getWord().then((word) => setWord(word));
+    setWord(getWord());
   }, [setWord]);
 
   return (
@@ -37,6 +45,7 @@ function App() {
           return <Row key={i} guess={guess} />;
         }
       })}
+      <Keyboard handleKey={handleKey} letters={letters} />
     </div>
   );
 }

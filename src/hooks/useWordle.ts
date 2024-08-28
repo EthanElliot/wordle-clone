@@ -1,28 +1,45 @@
 import { useState } from "react";
+import { checkWord } from "../services/checkWord";
+import { keys } from "../constants/letters";
 
 
-interface charType {
+
+type charType =  {
     value: string;
     color: string
 }
 
-const useWordle = (word) => {
+type KeysProps =  {
+    [key:string]: {color:string;}
+}
+
+const useWordle = (word:string|null) => {
+    console.log(word)
     const [guesses, setGuesses] = useState<charType[][]>([...Array(6)]);
     const [history, setHistory] = useState<string[]>([]);
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [turn, setTurn] = useState<number>(0);
     const [isCorrect, setIsCorrect] = useState<boolean>(false)
-    
+    const [letters, setLetters] = useState<KeysProps>(keys)
+
 
     const formatGuess= () => { 
         const wordArray: string[] | null[] = [...word]
         const formatGuess:charType[] = [...currentGuess].map((value)=>{
+            setLetters((prevLetters) => ({
+                ...prevLetters,
+                [value]: {color:'grey'}
+            }))
             return {value: value, color:'grey'}
         })
 
         formatGuess.forEach((char,i) => {
             if(wordArray[i] === char.value){
                 formatGuess[i].color = 'green'
+                setLetters((prevLetters) => ({
+                    ...prevLetters,
+                    [char.value]: {color:'green'}
+                }))
                 wordArray[i]=null
             }
         })
@@ -30,9 +47,14 @@ const useWordle = (word) => {
         formatGuess.forEach((char,i) => {
             if(wordArray.includes(char.value,i) && char.color !== 'green'){
                 formatGuess[i].color = 'yellow'
+                setLetters((prevLetters) => ({
+                    ...prevLetters,
+                    [char.value]: {color:'yellow'}
+                }))
                 wordArray[wordArray.indexOf(char.value)]=null
             }
         })
+        console.log(letters)
         return formatGuess
     }
 
@@ -56,8 +78,7 @@ const useWordle = (word) => {
         setCurrentGuess('')
     }
 
-    const handleKeyPress = (event: KeyboardEvent) => {
-        const key = event.key;
+    const handleKey = (key:string) => {
         //handle letters
         if (key.length == 1 && key.match(/^[a-zA-Z]/)) {
             if (currentGuess.length >= 5) {
@@ -86,11 +107,22 @@ const useWordle = (word) => {
                 return
             }
 
+            if (!checkWord(currentGuess)){
+                console.log('invalid guess')
+                return;
+            }
+
             const formatted = formatGuess()
             addNewGuess(formatted)
 
         }
     }
+
+
+    const handleKeyPress = (event: KeyboardEvent) => {
+        const key: string = event.key;
+        handleKey(key);
+      };
 
 
     return {
@@ -99,6 +131,7 @@ const useWordle = (word) => {
         turn,
         currentGuess,
         history,
+        letters,handleKey,
         handleKeyPress
     }
 }
