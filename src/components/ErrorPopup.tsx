@@ -10,7 +10,7 @@ const ErrorPopup: React.FC<ErrorPopupProps> = ({
 }: ErrorPopupProps) => {
   return (
     <div
-      className={`absolute  top-10 bg-slate-950 text-white px-4 py-2 rounded-md animate-error ${
+      className={`absolute  top-14 bg-slate-950 text-white px-4 py-2 rounded-md animate-error z-10 ${
         isVisible ? "absolute" : "hidden"
       }`}
     >

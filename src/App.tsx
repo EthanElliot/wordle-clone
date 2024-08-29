@@ -12,7 +12,6 @@ function App() {
   useEffect(() => {
     setWord(getWord());
   }, [setWord]);
-  console.log(word);
 
   //use wordle hook
   const {
@@ -40,21 +39,27 @@ function App() {
   }, [handleKeyPress, isCorrect, turn]);
 
   return (
-    <div
-      className={`flex flex-col w-screen h-screen bg-slate-900 text-white justify-center items-center ${
-        incorrectGuess ? "incorrectguess" : ""
-      } `}
-    >
-      <ErrorPopup message={incorrectGuessMessage} isVisible={incorrectGuess} />
-      {guesses.map((guess, i) => {
-        const isCurrentGuess = i === turn;
-        if (isCurrentGuess) {
-          return <Row key={i} guess={guess} currentGuess={currentGuess} />;
-        } else {
-          return <Row key={i} guess={guess} />;
-        }
-      })}
-      <Keyboard handleKey={handleKey} letters={letters} />
+    <div className="w-screen h-screen bg-slate-900 text-white ">
+      <header className="w-full flex items-center justify-center h-14 border-b-2 border-slate-500 text-3xl uppercase font-bold font-wordle">
+        wordle
+      </header>
+      <main className="flex flex-col justify-center items-center font-bold p-5 ">
+        <ErrorPopup
+          message={incorrectGuessMessage}
+          isVisible={incorrectGuess}
+        />
+        <div className={`text-2xl ${incorrectGuess ? "incorrectguess" : ""} `}>
+          {guesses.map((guess, i) => {
+            const isCurrentGuess = i === turn;
+            if (isCurrentGuess) {
+              return <Row key={i} guess={guess} currentGuess={currentGuess} />;
+            } else {
+              return <Row key={i} guess={guess} />;
+            }
+          })}
+        </div>
+        <Keyboard handleKey={handleKey} letters={letters} />
+      </main>
     </div>
   );
 }

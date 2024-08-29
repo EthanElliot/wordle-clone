@@ -3,15 +3,17 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        yellows: "bg-yellow-600",
+      fontFamily: {
+        wordle: ["Clear\\ Sans", "Helvetica\\ Neue", "Arial", "sans-serif"],
       },
+
       animation: {
         flip: "flip 0.5s ease forwards",
         jump: "jump 0.2s ease-in-out forwards",
         wobble: "wobble 0.3s ease-in-out forwards",
         error: "fadeout 1s ease-in-out forwards ",
       },
+
       keyframes: {
         flip: {
           "0%": {
